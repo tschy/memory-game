@@ -13,10 +13,22 @@ export function App() {
     const [solvedWords, setSolvedWords] = useState([] as string[]);
     function clickCard(word: string, index: number) {
         if (openCards.includes(index)) return;
+        console.log("start", word, index, openCards, solvedWords);
+
+        // if there are two other open cards, hide them.
+        if (openCards.length == 2) {
+            console.log("hide");
+            setOpenCards([index]);
+            return;
+        }
 
         // if there is another open card with the same word, mark both as solved
-
-        // if there are tow other open cards, hide them.
+        if (openCards.length == 1 && wordOrder[openCards[0]] == word) {
+            setSolvedWords([...solvedWords, word]);
+            setOpenCards([]);
+            return;
+        }
+        console.log("end", word, index);
 
         setOpenCards([index, ...openCards]);
     }
