@@ -34,6 +34,8 @@ body {
   border-radius: 0.5rem;
   display: inline-block;
   width: 6em;
+
+  cursor: pointer;
 }
 
 .hidden-card {
