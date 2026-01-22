@@ -6,10 +6,12 @@ export function App() {
         "peace", "hope", "charm", "glow", "grace", "cheer", "bliss", "pride",
         "faith", "light", "trust", "zeal"];
     const wordOrder = randomize(words.concat(...words));
-    const openCards = new Set<number>();
+    const openCards = new Set<number>([0]);
     const solvedWords = new Set<string>();
 
     function clickCard(word: string, index: number) {
+        if (openCards.has(index)) return;
+
         // if there is another open card with the same word, mark both as solved
 
         // if there are tow other open cards, hide them.
@@ -25,8 +27,8 @@ export function App() {
                     word={word}
                     key={word + "-" + i}
                     solved={solvedWords.has(word)}
-                    hidden={!openCards.has(i)}
-                    onClick={() => openCards.add(i)}
+                    open={openCards.has(i)}
+                    onClick={() => clickCard(word, i)}
                 />
             )}
         </>

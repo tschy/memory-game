@@ -3,15 +3,14 @@ import {useState} from "preact/hooks";
 export type CardProps = {
     word: string;
     solved: boolean;
-    hidden: boolean;
+    open: boolean;
     onClick: () => void;
 }
 
-export function Card({word}: CardProps) {
-    const [hidden, setHidden] = useState(true);
-    return <div class={"card " + (hidden ? "hidden-card" : "open-card")}
-                onClick={() => setHidden(!hidden)}
+export function Card({word, open, solved, onClick}: CardProps) {
+    return <div class={"card " + (solved ? "solved-card" : open ? "open-card" : "hidden-card")}
+                onClick={() => onClick()}
     >
-        {hidden ? "Look at me." : word}
+        {open || solved ? word : "Look at me."}
     </div>
 }

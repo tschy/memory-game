@@ -41,5 +41,10 @@ body {
 }
 
 .open-card {
+  background-color: #2d4ce8;
+
+}
+
+.solved-card {
   background-color: #42b983;
 }
