@@ -27,3 +27,19 @@ body {
   padding: 2rem;
   text-align: center;
 }
+
+.card {
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  display: inline-block;
+  width: 6em;
+}
+
+.hidden-card {
+  background-color: #f677e3;
+}
+
+.open-card {
+  background-color: #42b983;
+}
