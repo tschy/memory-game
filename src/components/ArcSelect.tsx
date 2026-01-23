@@ -1,4 +1,4 @@
-import {FunctionalComponent} from 'preact';
+import {FunctionalComponent, JSX} from 'preact';
 
 interface ArcSelectProps {
     min: number;
@@ -46,19 +46,21 @@ function getColor(position: number, min: number, max: number): string {
 export const ArcSelect: FunctionalComponent<ArcSelectProps> = ({val, setVal, min, max}) => {
     const numSegments = max - min + 1;
     const radius = 120;
-    const centerX = 150;
-    const centerY = 150;
+    const centerX = 200;
+    const centerY = 180;
     const startAngle = Math.PI * 0.75; // 135 degrees (bottom left)
     const endAngle = Math.PI * 2.25; // 405 degrees (bottom right, wrapping around)
     const totalAngle = endAngle - startAngle; // 3/4 of circle
-    const segmentAngle = totalAngle / numSegments;
+    const gapPerSegment = 0.08; // radians, space between segments
+    const availableAngle = totalAngle - (gapPerSegment * numSegments);
+    const segmentAngle = availableAngle / numSegments;
     
     const paths: JSX.Element[] = [];
     
     for (let i = 0; i < numSegments; i++) {
         const number = min + i;
-        const angle1 = startAngle + i * segmentAngle;
-        const angle2 = startAngle + (i + 1) * segmentAngle;
+        const angle1 = startAngle + i * (segmentAngle + gapPerSegment);
+        const angle2 = angle1 + segmentAngle;
         
         const isSelected = number === val;
         const currentRadius = isSelected ? radius + 20 : radius;
@@ -85,12 +87,7 @@ export const ArcSelect: FunctionalComponent<ArcSelectProps> = ({val, setVal, min
             A ${outerRadius} ${outerRadius} 0 ${largeArc} 0 ${x4} ${y4}
             Z
         `;
-        
-        const midAngle = (angle1 + angle2) / 2;
-        const labelRadius = isSelected ? radius + 35 : radius + 15;
-        const labelX = centerX + labelRadius * Math.cos(midAngle);
-        const labelY = centerY + labelRadius * Math.sin(midAngle);
-        
+
         paths.push(
             <g key={`segment-${i}`}>
                 <path
@@ -101,25 +98,12 @@ export const ArcSelect: FunctionalComponent<ArcSelectProps> = ({val, setVal, min
                     style={{cursor: 'pointer'}}
                     onClick={() => setVal(number)}
                 />
-                {isSelected && (
-                    <text
-                        x={labelX}
-                        y={labelY}
-                        text-anchor="middle"
-                        dominant-baseline="middle"
-                        font-size="14"
-                        fill="#666"
-                        pointer-events="none"
-                    >
-                        {number}
-                    </text>
-                )}
             </g>
         );
     }
     
     return (
-        <svg width="300" height="300" viewBox="0 0 300 300" style={{display: 'block', margin: '0 auto'}}>
+        <svg width="400" height="400" viewBox="0 0 400 360" style={{display: 'block', margin: '0 auto'}}>
             {paths}
             <text
                 x={centerX}
@@ -128,7 +112,7 @@ export const ArcSelect: FunctionalComponent<ArcSelectProps> = ({val, setVal, min
                 dominant-baseline="middle"
                 font-size="32"
                 font-weight="bold"
-                fill="#333"
+                class="arc-select-center-text"
                 pointer-events="none"
             >
                 {val}

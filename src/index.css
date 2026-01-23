@@ -20,12 +20,20 @@ body {
   min-height: 100vh;
 }
 
+.main-header {
+  font: 36px "Garamond", serif;
+}
+
 #app {
   display: flex;
   /*max-width: 1280px;*/
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+.setup-explanation {
+  font-size: 18px;
 }
 
 .card-type-button {
@@ -142,4 +150,8 @@ body {
   100% {
     transform: rotate(0deg);
   }
+}
+
+.arc-select-center-text {
+  fill: white;
 }

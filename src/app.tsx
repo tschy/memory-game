@@ -25,9 +25,11 @@ export function App() {
 
     return (
         <div>
+            <p class={"setup-explanation"}>Choose how many different cards you'd like:</p>
             <div style={{marginBottom: '20px'}}>
                 <ArcSelect val={numCards} setVal={setNumCards} min={4} max={24} />
             </div>
+            <p class={"setup-explanation"}>And then click here to play:</p>
             <div style={{textAlign: 'center'}}>
                 {Object.values(CardType).map((cardType) => (
                     <button onClick={() => {setCardType(cardType )}}
