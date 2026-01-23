@@ -30,10 +30,9 @@ export function getPicPosition(index: number, set: PictureSet): Position {
 }
 
 export function getCardPicSize(pos: Position, set: PictureSet): Dimensions {
-    return {
-        width: set.colBounds[pos.col + 1] - set.colBounds[pos.col],
-        height: set.rowBounds[pos.row + 1] - set.rowBounds[pos.row],
-    }
+    const width = set.colBounds ? set.colBounds[pos.col + 1] - set.colBounds[pos.col] : set.width / set.cols;
+    const height = set.rowBounds ? set.rowBounds[pos.row + 1] - set.rowBounds[pos.row]: set.height / set.rows;
+    return {width: width, height: height,}
 }
 
 export function getPixelPosition(pos: Position, set: PictureSet): PixelPosition {
