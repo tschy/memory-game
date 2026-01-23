@@ -9,6 +9,7 @@ export function TextCard({word, open, solved, onClick, extraClass}: TextCardProp
     const classes = ["text-card", stateClass, extraClass].filter(Boolean).join(" ");
     return <div class={classes}
                 onClick={() => onClick()}
+                draggable={false}
     >
         {open || solved ? word : "Look at me."}
     </div>

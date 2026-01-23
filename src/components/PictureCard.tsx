@@ -19,6 +19,7 @@ export function PictureCard({picSet, index, open, solved, onClick, extraClass}: 
                 onClick={() => onClick()}
     >
         <img src={picSet.path} alt={`Card ${idx}`}
+             draggable={false}
              style={`width: ${imgSize.width}px; height: ${imgSize.height}px; ` +
              `object-position: -${pixelPos.x}px -${pixelPos.y}px;`}
         />

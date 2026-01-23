@@ -67,6 +67,8 @@ body {
   /* if the image is larger or shifted, don't let it change layout */
   overflow: hidden;
 
+  user-select: none;
+
   img {
     /* this is for centering inside the div */
     display: block;
@@ -83,6 +85,7 @@ body {
   width: 6em;
 
   cursor: pointer;
+  user-select: none;
 }
 
 .text-card.hidden {
