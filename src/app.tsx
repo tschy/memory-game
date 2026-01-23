@@ -5,15 +5,18 @@ import {CardType, type PictureSet} from './model';
 import {PictureCard} from './components/PictureCard';
 import {allPictureSets, numberOfPics} from './pictures';
 
-const words = ["flow", "joy", "fun", "thrill", "love", "smile",
-    "peace", "hope", "charm", "glow", "grace", "cheer", "bliss", "pride",
-    "faith", "light", "trust", "zeal"];
+const words = [
+    "flow", "joy", "fun", "thrill", "love", "smile",
+    "peace", "hope", "charm", "glow", "grace", "cheer",
+    "bliss", "pride", "faith", "light", "trust", "zeal",
+    "calm", "glee", "warmth", "dream", "shine", "kind",
+];
 
 const wordIndexes = words.map((_, index) => index);
 
 export function App() {
     const [cardType, setCardType] = useState(null as CardType | null);
-    if (cardType) return <ActiveGame cardType={cardType} picSet={allPictureSets[0]}/>;
+    if (cardType) return <ActiveGame cardType={cardType} picSet={allPictureSets[1]}/>;
 
     return Object.values(CardType).map((cardType) => (
         <button onClick={() => {setCardType(cardType )}}
@@ -29,12 +32,14 @@ type ActiveGameProps = {
 }
 
 export function ActiveGame({cardType, picSet}: ActiveGameProps) {
-    const numCards = cardType == CardType.PICTURES ? numberOfPics(picSet!) : 10;
+    const numCards = 6; // cardType == CardType.PICTURES ? numberOfPics(picSet!) : 10;
+    const allIndexes = cardType == CardType.PICTURES
+        ? Array.from({ length: numCards }, (_, i) => i)
+        : wordIndexes;
+
     // wrap this in useState() so that randomization is only done when creating the component.
     // this probably needs to change when we add starting a new game
-    const [activeIndexes] = useState(cardType == CardType.PICTURES
-        ? Array.from({ length: numCards }, (_, i) => i)
-        : randomPick(numCards, wordIndexes));
+    const [activeIndexes] = useState(randomPick(numCards, allIndexes));
     const [cardOrder] = useState(randomize(activeIndexes.concat(...activeIndexes)));
 
     const [openCards, setOpenCards] = useState([] as number[]);
@@ -69,7 +74,7 @@ export function ActiveGame({cardType, picSet}: ActiveGameProps) {
                 const count = seenCounts[cardIndex] ?? 0;
                 seenCounts[cardIndex] = count + 1;
                 const pulseClass = isWin
-                    ? (count % 2 === 0 ? "win-pulse-grow" : "win-pulse-shrink")
+                    ? (count % 2 === 0 ? "win-wiggle-left" : "win-wiggle-right")
                     : "";
 
                 return cardType == CardType.WORDS ? (

@@ -6,11 +6,21 @@ export const allPictureSets: PictureSet[] = [
         path: 'sheep with green.png',
         width: 1038,
         height: 1038,
-        rows: 3,
         cols: 3,
-        rowBounds: [0, 355, 684, 1038],
+        rows: 3,
         colBounds: [0, 355, 681, 1038],
+        rowBounds: [0, 355, 684, 1038],
         backsideIndex: 1 * 3 + 1,
+    },
+    {
+        path: 'dall-e kiddo variety.png',
+        width: 957,
+        height: 1068,
+        cols: 5,
+        rows: 5,
+        colBounds: [0, 196, 385, 572, 761, 957],
+        rowBounds: [0, 207, 415, 620, 846, 1068],
+        backsideIndex: 4 * 5 + 3,
     },
 ];
 
