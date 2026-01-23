@@ -23,6 +23,21 @@ export function App() {
         />;
     }
 
+    return (
+        <div>
+            <div style={{marginBottom: '20px'}}>
+                <ArcSelect val={numCards} setVal={setNumCards} min={4} max={24} />
+            </div>
+            <div style={{textAlign: 'center'}}>
+                {Object.values(CardType).map((cardType) => (
+                    <button onClick={() => {setCardType(cardType )}}
+                            class={"card-type-button"}
+                    >{cardType}
+                    </button>
+                ))}
+            </div>
+        </div>
+    )
 }
 
 type ActiveGameProps = {
