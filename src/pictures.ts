@@ -1,6 +1,7 @@
 import type {Dimensions, PictureSet, PixelPosition, Position} from './model';
 import {pairwiseDifferences} from './util';
 
+// Put them in order of rising size, so that the size can easily be used to select the smallest sufficient one!
 export const allPictureSets: PictureSet[] = [
     {
         path: 'sheep with green.png',
@@ -23,6 +24,10 @@ export const allPictureSets: PictureSet[] = [
         backsideIndex: 4 * 5 + 3,
     },
 ];
+
+export function getPicSet(num: number) {
+    return allPictureSets.filter(set => numberOfPics(set) >= num)[0];
+}
 
 export function numberOfPics(set: PictureSet) {
     const base = set.rows * set.cols;

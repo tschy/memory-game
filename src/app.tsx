@@ -3,7 +3,8 @@ import {randomize, randomPick} from "./util";
 import {useState} from "preact/hooks";
 import {CardType, type PictureSet} from './model';
 import {PictureCard} from './components/PictureCard';
-import {allPictureSets, numberOfPics} from './pictures';
+import {getPicSet, numberOfPics} from './pictures';
+import {ArcSelect} from './components/ArcSelect';
 
 const words = [
     "flow", "joy", "fun", "thrill", "love", "smile",
@@ -12,30 +13,28 @@ const words = [
     "calm", "glee", "warmth", "dream", "shine", "kind",
 ];
 
-const wordIndexes = words.map((_, index) => index);
-
 export function App() {
     const [cardType, setCardType] = useState(null as CardType | null);
-    if (cardType) return <ActiveGame cardType={cardType} picSet={allPictureSets[1]}/>;
+    const [numCards, setNumCards] = useState(12);
 
-    return Object.values(CardType).map((cardType) => (
-        <button onClick={() => {setCardType(cardType )}}
-                class={"card-type-button"}
-        >{cardType}
-        </button>
-    ))
+    if (cardType) {
+        return <ActiveGame numCards={numCards}
+                           picSet={cardType == CardType.PICTURES ? getPicSet(numCards) : undefined}
+        />;
+    }
+
 }
 
 type ActiveGameProps = {
-    cardType: CardType,
+    // if undefined, use words.
     picSet?: PictureSet,
+    numCards: number,
 }
 
-export function ActiveGame({cardType, picSet}: ActiveGameProps) {
-    const numCards = 6; // cardType == CardType.PICTURES ? numberOfPics(picSet!) : 10;
-    const allIndexes = cardType == CardType.PICTURES
-        ? Array.from({ length: numCards }, (_, i) => i)
-        : wordIndexes;
+export function ActiveGame({numCards, picSet}: ActiveGameProps) {
+    const allIndexes = picSet
+        ? Array.from({ length: numberOfPics(picSet) }, (_, i) => i)
+        : words.map((_, index) => index);
 
     // wrap this in useState() so that randomization is only done when creating the component.
     // this probably needs to change when we add starting a new game
@@ -77,22 +76,22 @@ export function ActiveGame({cardType, picSet}: ActiveGameProps) {
                     ? (count % 2 === 0 ? "win-wiggle-left" : "win-wiggle-right")
                     : "";
 
-                return cardType == CardType.WORDS ? (
+                return picSet ? (
+                    <PictureCard
+                        solved={solvedCards.includes(cardIndex)}
+                        open={openCards.includes(i)}
+                        onClick={() => clickCard(cardIndex, i)}
+                        picSet={picSet}
+                        index={cardIndex}
+                        extraClass={pulseClass}
+                    />
+                ) : (
                     <TextCard
                         word={words[cardIndex]}
                         key={cardIndex + "-" + i}
                         solved={solvedCards.includes(cardIndex)}
                         open={openCards.includes(i)}
                         onClick={() => clickCard(cardIndex, i)}
-                        extraClass={pulseClass}
-                    />
-                ) : (
-                    <PictureCard
-                        solved={solvedCards.includes(cardIndex)}
-                        open={openCards.includes(i)}
-                        onClick={() => clickCard(cardIndex, i)}
-                        picSet={picSet!}
-                        index={cardIndex}
                         extraClass={pulseClass}
                     />
                 );
