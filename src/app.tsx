@@ -15,7 +15,7 @@ const words = [
 
 export function App() {
     const [cardType, setCardType] = useState(null as CardType | null);
-    const [numCards, setNumCards] = useState(12);
+    const [numCards, setNumCards] = useState(8);
 
     if (cardType) {
         return <ActiveGame numCards={numCards}
