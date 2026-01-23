@@ -7,6 +7,7 @@ export type CardProps = {
     solved: boolean;
     open: boolean;
     onClick: () => void;
+    extraClass?: string;
 }
 
 export type Position = {

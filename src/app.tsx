@@ -32,6 +32,7 @@ export function ActiveGame({cardType, picSet}: ActiveGameProps) {
     const [openCards, setOpenCards] = useState([] as number[]);
     const [solvedCards, setSolvedCards] = useState([] as number[]);
     const numCards = cardType == CardType.PICTURES ? numberOfPics(picSet!) : 10;
+    const isWin = solvedCards.length === numCards;
 
     // wrap this in useState() so that randomization is only done when creating the component.
     // this probably needs to change when we add starting a new game
@@ -59,25 +60,37 @@ export function ActiveGame({cardType, picSet}: ActiveGameProps) {
         setOpenCards([index, ...openCards]);
     }
 
+    const seenCounts: Record<number, number> = {};
+
     return (
         <div class={"cards-container"}>
-            {cardOrder.map((cardIndex, i) =>
-                cardType == CardType.WORDS ?
-                <TextCard
-                    word={words[cardIndex]}
-                    key={cardIndex + "-" + i}
-                    solved={solvedCards.includes(cardIndex)}
-                    open={openCards.includes(i)}
-                    onClick={() => clickCard(cardIndex, i)}
-                /> :
+            {cardOrder.map((cardIndex, i) => {
+                const count = seenCounts[cardIndex] ?? 0;
+                seenCounts[cardIndex] = count + 1;
+                const pulseClass = isWin
+                    ? (count % 2 === 0 ? "win-pulse-grow" : "win-pulse-shrink")
+                    : "";
+
+                return cardType == CardType.WORDS ? (
+                    <TextCard
+                        word={words[cardIndex]}
+                        key={cardIndex + "-" + i}
+                        solved={solvedCards.includes(cardIndex)}
+                        open={openCards.includes(i)}
+                        onClick={() => clickCard(cardIndex, i)}
+                        extraClass={pulseClass}
+                    />
+                ) : (
                     <PictureCard
                         solved={solvedCards.includes(cardIndex)}
                         open={openCards.includes(i)}
                         onClick={() => clickCard(cardIndex, i)}
                         picSet={picSet!}
                         index={cardIndex}
-                />
-            )}
+                        extraClass={pulseClass}
+                    />
+                );
+            })}
         </div>
     )
 }

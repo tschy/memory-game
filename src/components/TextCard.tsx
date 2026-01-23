@@ -4,8 +4,10 @@ export type TextCardProps = CardProps & {
     word: string;
 }
 
-export function TextCard({word, open, solved, onClick}: TextCardProps) {
-    return <div class={"text-card " + (solved ? "solved" : open ? "open" : "hidden")}
+export function TextCard({word, open, solved, onClick, extraClass}: TextCardProps) {
+    const stateClass = solved ? "solved" : open ? "open" : "hidden";
+    const classes = ["text-card", stateClass, extraClass].filter(Boolean).join(" ");
+    return <div class={classes}
                 onClick={() => onClick()}
     >
         {open || solved ? word : "Look at me."}
