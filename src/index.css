@@ -22,7 +22,7 @@ body {
 
 #app {
   display: flex;
-  max-width: 1280px;
+  /*max-width: 1280px;*/
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -35,7 +35,21 @@ body {
   font-size: 1.2rem;
 }
 
-.card {
+.picture-card {
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  display: inline-block;
+
+  cursor: pointer;
+
+  img {
+    object-fit: none;
+  }
+}
+
+
+.text-card {
   padding: 1rem;
   margin: 0.5rem;
   border-radius: 0.5rem;
@@ -45,15 +59,15 @@ body {
   cursor: pointer;
 }
 
-.hidden-card {
+.text-card.hidden {
   background-color: #f677e3;
 }
 
-.open-card {
+.text-card.open {
   background-color: #2d4ce8;
 
 }
 
-.solved-card {
+.text-card.solved {
   background-color: #42b983;
 }

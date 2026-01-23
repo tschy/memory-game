@@ -1,19 +1,19 @@
 import {TextCard} from "./components/TextCard";
 import {randomize, randomPick} from "./util";
 import {useState} from "preact/hooks";
-import {CardType} from './model';
+import {CardType, type PictureSet} from './model';
+import {PictureCard} from './components/PictureCard';
+import {allPictureSets, numberOfPics} from './pictures';
 
 const words = ["flow", "joy", "fun", "thrill", "love", "smile",
     "peace", "hope", "charm", "glow", "grace", "cheer", "bliss", "pride",
     "faith", "light", "trust", "zeal"];
 
-const activeWords = randomPick(10, words);
-
-const wordOrder = randomize(activeWords.concat(...activeWords));
+const wordIndexes = words.map((_, index) => index);
 
 export function App() {
     const [cardType, setCardType] = useState(null as CardType | null);
-    if (cardType) return <ActiveGame cardType={cardType} />;
+    if (cardType) return <ActiveGame cardType={cardType} picSet={allPictureSets[0]}/>;
 
     return Object.values(CardType).map((cardType) => (
         <button onClick={() => {setCardType(cardType )}}
@@ -25,42 +25,57 @@ export function App() {
 
 type ActiveGameProps = {
     cardType: CardType,
+    picSet?: PictureSet,
 }
 
-export function ActiveGame({cardType}: ActiveGameProps) {
+export function ActiveGame({cardType, picSet}: ActiveGameProps) {
     const [openCards, setOpenCards] = useState([] as number[]);
-    const [solvedWords, setSolvedWords] = useState([] as string[]);
-    function clickCard(word: string, index: number) {
+    const [solvedCards, setSolvedCards] = useState([] as number[]);
+    const numCards = cardType == CardType.PICTURES ? numberOfPics(picSet!) : 10;
+
+    // wrap this in useState() so that randomization is only done when creating the component.
+    // this probably needs to change when we add starting a new game
+    const [activeIndexes] = useState(cardType == CardType.PICTURES
+        ? Array.from({ length: numCards }, (_, i) => i)
+        : randomPick(numCards, wordIndexes));
+    const [cardOrder] = useState(randomize(activeIndexes.concat(...activeIndexes)));
+
+    function clickCard(cardIndex: number, index: number) {
         if (openCards.includes(index)) return;
-        console.log("start", word, index, openCards, solvedWords);
 
         // if there are two other open cards, hide them.
         if (openCards.length == 2) {
-            console.log("hide");
             setOpenCards([index]);
             return;
         }
 
         // if there is another open card with the same word, mark both as solved
-        if (openCards.length == 1 && wordOrder[openCards[0]] == word) {
-            setSolvedWords([...solvedWords, word]);
+        if (openCards.length == 1 && cardOrder[openCards[0]] == cardIndex) {
+            setSolvedCards([...solvedCards, cardIndex]);
             setOpenCards([]);
             return;
         }
-        console.log("end", word, index);
 
         setOpenCards([index, ...openCards]);
     }
 
     return (
         <div class={"cards-container"}>
-            {wordOrder.map((word, i) =>
+            {cardOrder.map((cardIndex, i) =>
+                cardType == CardType.WORDS ?
                 <TextCard
-                    word={word}
-                    key={word + "-" + i}
-                    solved={solvedWords.includes(word)}
+                    word={words[cardIndex]}
+                    key={cardIndex + "-" + i}
+                    solved={solvedCards.includes(cardIndex)}
                     open={openCards.includes(i)}
-                    onClick={() => clickCard(word, i)}
+                    onClick={() => clickCard(cardIndex, i)}
+                /> :
+                    <PictureCard
+                        solved={solvedCards.includes(cardIndex)}
+                        open={openCards.includes(i)}
+                        onClick={() => clickCard(cardIndex, i)}
+                        picSet={picSet!}
+                        index={cardIndex}
                 />
             )}
         </div>
