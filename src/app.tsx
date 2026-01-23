@@ -38,8 +38,8 @@ export function ActiveGame({cardType, picSet}: ActiveGameProps) {
     const [cardOrder] = useState(randomize(activeIndexes.concat(...activeIndexes)));
 
     const [openCards, setOpenCards] = useState([] as number[]);
-    // ATTENTION ALL: 'activeIndexes' here is only for dev purposes to show the winning animation right away
-    const [solvedCards, setSolvedCards] = useState(activeIndexes as number[]);
+    // ATTENTION ALL: you can initialize this with 'activeIndexes' for dev purposes to show the winning animation right away
+    const [solvedCards, setSolvedCards] = useState([] as number[]);
     const isWin = solvedCards.length === numCards;
 
     function clickCard(cardIndex: number, index: number) {
