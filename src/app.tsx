@@ -1,14 +1,33 @@
-import {Card} from "./components/Card";
-import {randomize} from "./util";
+import {TextCard} from "./components/TextCard";
+import {randomize, randomPick} from "./util";
 import {useState} from "preact/hooks";
+import {CardType} from './model';
 
 const words = ["flow", "joy", "fun", "thrill", "love", "smile",
     "peace", "hope", "charm", "glow", "grace", "cheer", "bliss", "pride",
     "faith", "light", "trust", "zeal"];
 
-const wordOrder = randomize(words.concat(...words));
+const activeWords = randomPick(10, words);
+
+const wordOrder = randomize(activeWords.concat(...activeWords));
 
 export function App() {
+    const [cardType, setCardType] = useState(null as CardType | null);
+    if (cardType) return <ActiveGame cardType={cardType} />;
+
+    return Object.values(CardType).map((cardType) => (
+        <button onClick={() => {setCardType(cardType )}}
+                class={"card-type-button"}
+        >{cardType}
+        </button>
+    ))
+}
+
+type ActiveGameProps = {
+    cardType: CardType,
+}
+
+export function ActiveGame({cardType}: ActiveGameProps) {
     const [openCards, setOpenCards] = useState([] as number[]);
     const [solvedWords, setSolvedWords] = useState([] as string[]);
     function clickCard(word: string, index: number) {
@@ -34,10 +53,9 @@ export function App() {
     }
 
     return (
-        <>
-            <h1>Memory Game</h1>
+        <div class={"cards-container"}>
             {wordOrder.map((word, i) =>
-                <Card
+                <TextCard
                     word={word}
                     key={word + "-" + i}
                     solved={solvedWords.includes(word)}
@@ -45,6 +63,6 @@ export function App() {
                     onClick={() => clickCard(word, i)}
                 />
             )}
-        </>
+        </div>
     )
 }
