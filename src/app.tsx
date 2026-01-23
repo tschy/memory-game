@@ -29,17 +29,18 @@ type ActiveGameProps = {
 }
 
 export function ActiveGame({cardType, picSet}: ActiveGameProps) {
-    const [openCards, setOpenCards] = useState([] as number[]);
-    const [solvedCards, setSolvedCards] = useState([] as number[]);
     const numCards = cardType == CardType.PICTURES ? numberOfPics(picSet!) : 10;
-    const isWin = solvedCards.length === numCards;
-
     // wrap this in useState() so that randomization is only done when creating the component.
     // this probably needs to change when we add starting a new game
     const [activeIndexes] = useState(cardType == CardType.PICTURES
         ? Array.from({ length: numCards }, (_, i) => i)
         : randomPick(numCards, wordIndexes));
     const [cardOrder] = useState(randomize(activeIndexes.concat(...activeIndexes)));
+
+    const [openCards, setOpenCards] = useState([] as number[]);
+    // ATTENTION ALL: 'activeIndexes' here is only for dev purposes to show the winning animation right away
+    const [solvedCards, setSolvedCards] = useState(activeIndexes as number[]);
+    const isWin = solvedCards.length === numCards;
 
     function clickCard(cardIndex: number, index: number) {
         if (openCards.includes(index)) return;
