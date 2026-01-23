@@ -1,4 +1,5 @@
-import type {Dimensions, PictureSet, Position} from './model';
+import type {Dimensions, PictureSet, PixelPosition, Position} from './model';
+import {pairwiseDifferences} from './util';
 
 export const allPictureSets: PictureSet[] = [
     {
@@ -7,6 +8,8 @@ export const allPictureSets: PictureSet[] = [
         height: 1038,
         rows: 3,
         cols: 3,
+        rowBounds: [0, 355, 684, 1038],
+        colBounds: [0, 355, 681, 1038],
         backsideIndex: 1 * 3 + 1,
     },
 ];
@@ -26,9 +29,22 @@ export function getPicPosition(index: number, set: PictureSet): Position {
     return {row, col: idx - row * set.cols };
 }
 
-export function cardPicSize(set: PictureSet): Dimensions {
+export function getCardPicSize(pos: Position, set: PictureSet): Dimensions {
     return {
-        width: set.width / set.cols,
-        height: set.height / set.rows,
+        width: set.colBounds[pos.col + 1] - set.colBounds[pos.col],
+        height: set.rowBounds[pos.row + 1] - set.rowBounds[pos.row],
     }
+}
+
+export function getPixelPosition(pos: Position, set: PictureSet): PixelPosition {
+    const size = getCardPicSize(pos, set);
+    const x = set.colBounds ? set.colBounds[pos.col] : pos.col * size.width;
+    const y = set.rowBounds ? set.rowBounds[pos.row] : pos.row * size.height;
+    return {x, y};
+}
+
+export function cardPicMaxSize(set: PictureSet): Dimensions {
+    const width = set.colBounds ? Math.max(...pairwiseDifferences(set.colBounds)) : set.width / set.cols;
+    const height = set.rowBounds ? Math.max(...pairwiseDifferences(set.rowBounds)) : set.height / set.rows;
+    return {width, height,}
 }
