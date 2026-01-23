@@ -32,8 +32,8 @@ export type PictureSet = {
     width: number,
     height: number,
     // how many cards are in the image?
-    rows: number,
     cols: number,
+    rows: number,
     // When rows and cols are not of uniform size (which is often the case for AI generated ones),
     // this says where rows and cols end.
     // (For simplicity, this must include the first and last value 0 and total width/height. Thus n+1 entries.)
