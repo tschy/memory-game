@@ -21,7 +21,7 @@ body {
 }
 
 .main-header {
-  font: 36px "Garamond", serif;
+  font: 48px "Garamond", serif;
 }
 
 #app {
@@ -81,15 +81,19 @@ body {
   padding: 1rem;
   margin: 0.5rem;
   border-radius: 0.5rem;
-  display: inline-block;
-  width: 6em;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 9em;
+  height: 3em;
+  font: 36px "Garamond", serif;
+  color: black;
   cursor: pointer;
   user-select: none;
 }
 
 .text-card.hidden {
-  background-color: #f677e3;
+  background-color: #f3d4ac;
 }
 
 .text-card.open {
