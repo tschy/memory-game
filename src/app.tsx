@@ -6,11 +6,18 @@ import {PictureCard} from './components/PictureCard';
 import {getPicSet, numberOfPics} from './pictures';
 import {ArcSelect} from './components/ArcSelect';
 
-const words = [
+const happyWords = [
     "flow", "joy", "fun", "thrill", "love", "smile",
     "peace", "hope", "charm", "glow", "grace", "cheer",
     "bliss", "pride", "faith", "light", "trust", "zeal",
     "calm", "glee", "warmth", "dream", "shine", "kind",
+];
+
+const flowerWords = [
+    "Lily", "Rose", "Tulip", "Chrysanthemum",
+    "Iris", "Hibiscus", "Hydrangea", "Calla Lily",
+    "Sunflower", "Peony", "Orchid", "Gerbera",
+    "Magnolia", "Daffodil", "Lilac"
 ];
 
 export function App() {
@@ -20,6 +27,7 @@ export function App() {
     const picSet = getPicSet(numCards);
     if (cardType) {
         return <ActiveGame numCards={numCards}
+                           wordSet={numCards > 8 && numCards <= 15 ? flowerWords : happyWords}
                            picSet={cardType == CardType.PICTURES ? picSet : undefined}
         />;
     }
@@ -44,15 +52,17 @@ export function App() {
 }
 
 type ActiveGameProps = {
+    numCards: number,
+    // always defined, just to avoid checking it all the time.
+    wordSet: string[],
     // if undefined, use words.
     picSet?: PictureSet,
-    numCards: number,
 }
 
-export function ActiveGame({numCards, picSet}: ActiveGameProps) {
+export function ActiveGame({numCards, picSet, wordSet}: ActiveGameProps) {
     const allIndexes = picSet
         ? Array.from({ length: numberOfPics(picSet) }, (_, i) => i)
-        : words.map((_, index) => index);
+        : wordSet.map((_, index) => index);
 
     // wrap this in useState() so that randomization is only done when creating the component.
     // this probably needs to change when we add starting a new game
@@ -105,7 +115,7 @@ export function ActiveGame({numCards, picSet}: ActiveGameProps) {
                     />
                 ) : (
                     <TextCard
-                        word={words[cardIndex]}
+                        word={wordSet[cardIndex]}
                         key={cardIndex + "-" + i}
                         solved={solvedCards.includes(cardIndex)}
                         open={openCards.includes(i)}
