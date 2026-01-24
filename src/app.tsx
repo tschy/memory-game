@@ -17,9 +17,10 @@ export function App() {
     const [cardType, setCardType] = useState(null as CardType | null);
     const [numCards, setNumCards] = useState(8);
 
+    const picSet = getPicSet(numCards);
     if (cardType) {
         return <ActiveGame numCards={numCards}
-                           picSet={cardType == CardType.PICTURES ? getPicSet(numCards) : undefined}
+                           picSet={cardType == CardType.PICTURES ? picSet : undefined}
         />;
     }
 
@@ -27,7 +28,7 @@ export function App() {
         <div>
             <p class={"setup-explanation"}>Choose how many different cards you'd like:</p>
             <div style={{marginBottom: '20px'}}>
-                <ArcSelect val={numCards} setVal={setNumCards} min={4} max={24} />
+                <ArcSelect val={numCards} setVal={setNumCards} min={4} max={24} title={picSet.title}/>
             </div>
             <p class={"setup-explanation"}>And then click here to play:</p>
             <div style={{textAlign: 'center'}}>

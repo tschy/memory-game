@@ -5,6 +5,8 @@ import {pairwiseDifferences} from './util';
 export const allPictureSets: PictureSet[] = [
     {
         path: 'sheep with green.png',
+        title: 'Sheep',
+        source: 'Nanobanana free, 2026-01-23',
         width: 1038,
         height: 1038,
         cols: 3,
@@ -14,7 +16,19 @@ export const allPictureSets: PictureSet[] = [
         backsideIndex: 1 * 3 + 1,
     },
     {
+        path: 'favorite flowers.png',
+        title: `Flowers`,
+        source: 'ChatGPT / Dall-E, 2026-01-24',
+        width: 1006,
+        height: 1006,
+        cols: 4,
+        rows: 4,
+        backsideIndex: 15,
+    },
+    {
         path: 'dall-e kiddo variety.png',
+        title: `Child's play`,
+        source: 'ChatGPT / Dall-E, 2026-01-22',
         width: 957,
         height: 1068,
         cols: 5,

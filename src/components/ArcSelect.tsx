@@ -4,6 +4,7 @@ interface ArcSelectProps {
     min: number;
     max: number;
     val: number;
+    title: string;
     setVal: (val: number) => void;
 }
 
@@ -90,7 +91,7 @@ function getColor(position: number, min: number, max: number): string {
     }
 }
 
-export const ArcSelect: FunctionalComponent<ArcSelectProps> = ({val, setVal, min, max}) => {
+export const ArcSelect: FunctionalComponent<ArcSelectProps> = ({val, setVal, min, max, title}) => {
     const numSegments = max - min + 1;
     if (numSegments <= 0) {
         return null;
@@ -141,12 +142,11 @@ export const ArcSelect: FunctionalComponent<ArcSelectProps> = ({val, setVal, min
                 y={center.y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fontSize="32"
-                fontWeight="bold"
                 class="arc-select-center-text"
                 pointerEvents="none"
             >
-                {val}
+                <tspan x={center.x} dy="-0.6em">{val}</tspan>
+                <tspan x={center.x} dy="1.2em">{title}</tspan>
             </text>
         </svg>
     );
