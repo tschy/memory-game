@@ -1,6 +1,6 @@
 import {TextCard} from "./components/TextCard";
-import {randomize, randomPick} from "./util";
-import {useState} from "preact/hooks";
+import {divides, randomize, randomPick} from "./util";
+import {useLayoutEffect, useRef, useState} from "preact/hooks";
 import {CardType} from './model';
 import {PictureCard} from './components/PictureCard';
 import {getPicSet, PictureSet} from './pictures';
@@ -68,6 +68,8 @@ export function ActiveGame({numCards, picSet, wordSet}: ActiveGameProps) {
     // this probably needs to change when we add starting a new game
     const [activeIndexes] = useState(randomPick(numCards, allIndexes));
     const [cardOrder] = useState(randomize(activeIndexes.concat(...activeIndexes)));
+    const [columns, setColumns] = useState(Math.ceil(Math.sqrt(numCards*2)));
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const [openCards, setOpenCards] = useState([] as number[]);
     // ATTENTION ALL: you can initialize this with 'activeIndexes' for dev purposes to show the winning animation right away
@@ -92,11 +94,28 @@ export function ActiveGame({numCards, picSet, wordSet}: ActiveGameProps) {
 
         setOpenCards([index, ...openCards]);
     }
+    function calculateColumns() {
+        console.log("calculateColumns");
+        if (!containerRef.current) return;
+        const card = containerRef.current.children.item(0);
+        if (!card) return;
+        console.log("calculateColumns has a card");
+        const { width, height } = card.getBoundingClientRect();
+        const { width: tw, height: th } = window.visualViewport!;
+        let cols = Math.ceil(Math.sqrt(numCards*2*height/th/(width/tw)));
+        if (!divides(numCards*2, cols) && divides(numCards*2, cols-1)) cols--;
+        setColumns(cols);
+    }
+    useLayoutEffect(calculateColumns, []);
+    window.visualViewport!.addEventListener('resize', (e) => calculateColumns());
 
     const seenCounts: Record<number, number> = {};
 
     return (
-        <div class={"cards-container"}>
+        <div class={"cards-container"}
+             ref={containerRef}
+             style={{  gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+        >
             {cardOrder.map((cardIndex, i) => {
                 const count = seenCounts[cardIndex] ?? 0;
                 seenCounts[cardIndex] = count + 1;

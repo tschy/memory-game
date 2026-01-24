@@ -44,9 +44,9 @@ body {
 }
 
 .cards-container {
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
-  justify-content: center; /* or: flex-start */
+  justify-content: center;
   align-items: flex-start;
   gap: 0.5rem; /* replaces relying on per-card margins */
 }

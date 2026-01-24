@@ -1,3 +1,12 @@
+export function divides(product: number, b: number): boolean {
+  // If either value isn't a finite integer, treat it as not divisible.
+  if (!Number.isFinite(product) || !Number.isFinite(b)) return false;
+  if (!Number.isInteger(product) || !Number.isInteger(b)) return false;
+  if (b === 0) return false;
+
+  return product % b === 0;
+}
+
 export const pairwiseDifferences = (arr: number[]) =>
     arr.slice(1).map((x: number, i) => x - arr[i]);
 
