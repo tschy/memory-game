@@ -1,5 +1,5 @@
-import type {CardProps, PictureSet} from '../model';
-import {BACKSIDE, cardPicMaxSize, getCardPicSize, getPicPosition, getPixelPosition} from '../pictures';
+import type {CardProps} from '../model';
+import {BACKSIDE, PictureSet} from '../pictures';
 
 export type PictureCardProps =  CardProps & {
     picSet: PictureSet,
@@ -8,10 +8,10 @@ export type PictureCardProps =  CardProps & {
 
 export function PictureCard({picSet, index, open, solved, onClick, extraClass}: PictureCardProps) {
     const idx = open || solved ? index : BACKSIDE;
-    const cardSize = cardPicMaxSize(picSet);
-    const pos = getPicPosition(idx, picSet);
-    const imgSize = getCardPicSize(pos, picSet)
-    const pixelPos = getPixelPosition(pos, picSet);
+    const cardSize = picSet.getMaxCardSize();
+    const pos = picSet.getPosition(idx);
+    const imgSize = picSet.getCardSize(pos)
+    const pixelPos = picSet.getPixelPosition(pos);
     const stateClass = solved ? "solved" : open ? "open" : "hidden";
     const classes = ["picture-card", stateClass, extraClass].filter(Boolean).join(" ");
     return <div class={classes}

@@ -1,9 +1,9 @@
 import {TextCard} from "./components/TextCard";
 import {randomize, randomPick} from "./util";
 import {useState} from "preact/hooks";
-import {CardType, type PictureSet} from './model';
+import {CardType} from './model';
 import {PictureCard} from './components/PictureCard';
-import {getPicSet, numberOfPics} from './pictures';
+import {getPicSet, PictureSet} from './pictures';
 import {ArcSelect} from './components/ArcSelect';
 
 const happyWords = [
@@ -61,7 +61,7 @@ type ActiveGameProps = {
 
 export function ActiveGame({numCards, picSet, wordSet}: ActiveGameProps) {
     const allIndexes = picSet
-        ? Array.from({ length: numberOfPics(picSet) }, (_, i) => i)
+        ? Array.from({ length: picSet.numberOfPics() }, (_, i) => i)
         : wordSet.map((_, index) => index);
 
     // wrap this in useState() so that randomization is only done when creating the component.
