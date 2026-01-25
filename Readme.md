@@ -1,8 +1,5 @@
 
-
-    Train your brain
-    with my new game.
-
+![Train your brain with my new game.](sheep-ad.png)
 
 Made with love, Amp Code, and a few other AI tools.
 
