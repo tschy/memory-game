@@ -14,8 +14,8 @@ const happyWords = [
 ];
 
 const flowerWords = [
-    "Lily", "Rose", "Tulip", "Chrysanthemum",
-    "Iris", "Hibiscus", "Hydrangea", "Calla",
+    "Lily", "Rose", "Tulip", "Dahlia",
+    "Iris", "Hibiscus", "Hortensia", "Calla Lily",
     "Sunflower", "Peony", "Orchid", "Daisy",
     "Magnolia", "Daffodil", "Lilac"
 ];
