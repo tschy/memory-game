@@ -8,6 +8,7 @@ export default defineConfig({
     plugins: [
         preact(),
         VitePWA({
+            registerType: 'autoUpdate',
             manifest: {
                 name: 'Memory Game',
                 short_name: 'Memory',

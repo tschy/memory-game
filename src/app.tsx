@@ -29,6 +29,7 @@ export function App() {
         return <ActiveGame numCards={numCards}
                            wordSet={numCards > 8 && numCards <= 15 ? flowerWords : happyWords}
                            picSet={cardType == CardType.PICTURES ? picSet : undefined}
+                           onNewGame={() => window.location.reload()}
         />;
     }
 
@@ -57,9 +58,11 @@ type ActiveGameProps = {
     wordSet: string[],
     // if undefined, use words.
     picSet?: PictureSet,
+    // callback when user clicks new game
+    onNewGame?: () => void,
 }
 
-export function ActiveGame({numCards, picSet, wordSet}: ActiveGameProps) {
+export function ActiveGame({numCards, picSet, wordSet, onNewGame}: ActiveGameProps) {
     const allIndexes = picSet
         ? Array.from({ length: picSet.numberOfPics() }, (_, i) => i)
         : wordSet.map((_, index) => index);
@@ -75,6 +78,15 @@ export function ActiveGame({numCards, picSet, wordSet}: ActiveGameProps) {
     // ATTENTION ALL: you can initialize this with 'activeIndexes' for dev purposes to show the winning animation right away
     const [solvedCards, setSolvedCards] = useState([] as number[]);
     const isWin = solvedCards.length === numCards;
+    const [showNewGameButton, setShowNewGameButton] = useState(false);
+
+    // Show new game button after animation completes (1.8s = 3 cycles * 0.6s per cycle)
+    useLayoutEffect(() => {
+        if (isWin && !showNewGameButton) {
+            const timer = setTimeout(() => setShowNewGameButton(true), 1800);
+            return () => clearTimeout(timer);
+        }
+    }, [isWin, showNewGameButton]);
 
     function clickCard(cardIndex: number, index: number) {
         if (openCards.includes(index)) return;
@@ -107,42 +119,70 @@ export function ActiveGame({numCards, picSet, wordSet}: ActiveGameProps) {
         setColumns(cols);
     }
     useLayoutEffect(calculateColumns, []);
-    window.visualViewport!.addEventListener('resize', (e) => calculateColumns());
+    window.visualViewport!.addEventListener('resize', calculateColumns);
 
     const seenCounts: Record<number, number> = {};
 
     return (
-        <div class={"cards-container"}
-             ref={containerRef}
-             style={{  gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-        >
-            {cardOrder.map((cardIndex, i) => {
-                const count = seenCounts[cardIndex] ?? 0;
-                seenCounts[cardIndex] = count + 1;
-                const pulseClass = isWin
-                    ? (count % 2 === 0 ? "win-wiggle-left" : "win-wiggle-right")
-                    : "";
+         <div style={{position: 'relative', width: '100%', height: '100%'}}>
+             <div class={"cards-container"}
+                  ref={containerRef}
+                  style={{  gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+             >
+                 {cardOrder.map((cardIndex, i) => {
+                     const count = seenCounts[cardIndex] ?? 0;
+                     seenCounts[cardIndex] = count + 1;
+                     const pulseClass = isWin
+                         ? (count % 2 === 0 ? "win-wiggle-left" : "win-wiggle-right")
+                         : "";
 
-                return picSet ? (
-                    <PictureCard
-                        solved={solvedCards.includes(cardIndex)}
-                        open={openCards.includes(i)}
-                        onClick={() => clickCard(cardIndex, i)}
-                        picSet={picSet}
-                        index={cardIndex}
-                        extraClass={pulseClass}
-                    />
-                ) : (
-                    <TextCard
-                        word={wordSet[cardIndex]}
-                        key={cardIndex + "-" + i}
-                        solved={solvedCards.includes(cardIndex)}
-                        open={openCards.includes(i)}
-                        onClick={() => clickCard(cardIndex, i)}
-                        extraClass={pulseClass}
-                    />
-                );
-            })}
-        </div>
-    )
+                     return picSet ? (
+                         <PictureCard
+                             solved={solvedCards.includes(cardIndex)}
+                             open={openCards.includes(i)}
+                             onClick={() => clickCard(cardIndex, i)}
+                             picSet={picSet}
+                             index={cardIndex}
+                             extraClass={pulseClass}
+                         />
+                     ) : (
+                         <TextCard
+                             word={wordSet[cardIndex]}
+                             key={cardIndex + "-" + i}
+                             solved={solvedCards.includes(cardIndex)}
+                             open={openCards.includes(i)}
+                             onClick={() => clickCard(cardIndex, i)}
+                             extraClass={pulseClass}
+                         />
+                     );
+                 })}
+             </div>
+             {showNewGameButton && (
+                 <div style={{
+                     position: 'fixed',
+                     top: '50%',
+                     left: '50%',
+                     transform: 'translate(-50%, -50%)',
+                     zIndex: 1000,
+                 }}>
+                     <button 
+                         onClick={onNewGame}
+                         style={{
+                             padding: '1.5rem 3rem',
+                             fontSize: '1.5rem',
+                             borderRadius: '0.5rem',
+                             cursor: 'pointer',
+                             backgroundColor: '#2d4ce8',
+                             color: 'white',
+                             border: '3px solid #1e2b99',
+                             fontWeight: 'bold',
+                             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+                         }}
+                     >
+                         New Game
+                     </button>
+                 </div>
+             )}
+         </div>
+     )
 }
