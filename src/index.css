@@ -15,38 +15,154 @@
 
 body {
   margin: 0;
-  display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
 
+.main-header {
+  font: 48px "Garamond", serif;
+}
+
 #app {
-  max-width: 1280px;
+  display: flex;
+  /*max-width: 1280px;*/
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
-.card {
+.setup-explanation {
+  font-size: 18px;
+}
+
+.card-type-button {
   padding: 1rem;
   margin: 0.5rem;
   border-radius: 0.5rem;
-  display: inline-block;
-  width: 6em;
+  font-size: 1.2rem;
+}
 
+.cards-container {
+  display: grid;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.5rem; /* replaces relying on per-card margins */
+}
+
+.picture-card {
   cursor: pointer;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+
+  /* keep the outer element's size stable */
+  box-sizing: border-box;
+
+  /* center content */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* if the image is larger or shifted, don't let it change layout */
+  overflow: hidden;
+
+  user-select: none;
+
+  img {
+    /* this is for centering inside the div */
+    display: block;
+    /* this is for cropping the sprite */
+    object-fit: none;
+  }
 }
 
-.hidden-card {
-  background-color: #f677e3;
+.text-card {
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 9em;
+  height: 3em;
+  font: 36px "Garamond", serif;
+  color: black;
+  cursor: pointer;
+  user-select: none;
 }
 
-.open-card {
+.text-card.hidden {
+  background-color: #f3d4ac;
+}
+
+.text-card.open {
   background-color: #2d4ce8;
 
 }
 
-.solved-card {
+.text-card.solved {
   background-color: #42b983;
+}
+
+.win-wiggle-left,
+.win-wiggle-right {
+  animation-duration: 0.6s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 3;
+  animation-fill-mode: none;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.win-wiggle-left {
+  animation-name: winWiggleLeft;
+}
+
+.win-wiggle-right {
+  animation-name: winWiggleRight;
+}
+
+@keyframes winWiggleLeft {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(8deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes winWiggleRight {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(8deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-8deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.arc-select-center-text {
+  fill: white;
+  font: 24px "Garamond", serif;
+  tspan {
+     text-anchor: middle;
+  }
 }
