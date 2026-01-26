@@ -5,20 +5,7 @@ import {CardType} from './model';
 import {PictureCard} from './components/PictureCard';
 import {getPicSet, PictureSet} from './pictures';
 import {ArcSelect} from './components/ArcSelect';
-
-const happyWords = [
-    "flow", "joy", "fun", "thrill", "love", "smile",
-    "peace", "hope", "charm", "glow", "grace", "cheer",
-    "bliss", "pride", "faith", "light", "trust", "zeal",
-    "calm", "glee", "warmth", "dream", "shine", "kind",
-];
-
-const flowerWords = [
-    "Lily", "Rose", "Tulip", "Dahlia",
-    "Iris", "Hibiscus", "Hortensia", "Calla Lily",
-    "Sunflower", "Peony", "Orchid", "Daisy",
-    "Magnolia", "Daffodil", "Lilac"
-];
+import {getWords} from './words';
 
 export function App() {
     const [cardType, setCardType] = useState(null as CardType | null);
@@ -27,7 +14,7 @@ export function App() {
     const picSet = getPicSet(numCards);
     if (cardType) {
         return <ActiveGame numCards={numCards}
-                           wordSet={numCards > 8 && numCards <= 15 ? flowerWords : happyWords}
+                           wordSet={getWords(numCards)}
                            picSet={cardType == CardType.PICTURES ? picSet : undefined}
                            onNewGame={() => window.location.reload()}
         />;
