@@ -7,10 +7,21 @@ import {getPicSet, PictureSet} from './pictures';
 import {ArcSelect} from './components/ArcSelect';
 import {getWords} from './words';
 
+const minNumCards = 4;
+const maxNumCards = 24;
+
 export function App() {
     const [cardType, setCardType] = useState(null as CardType | null);
-    const [numCards, setNumCards] = useState(8);
-
+    const getInitialNumCards = () => {
+        const params = new URLSearchParams(window.location.hash.slice(1));
+        const n = parseInt(params.get('n') || '');
+        return (n >= minNumCards && n <= maxNumCards) ? n : 8;
+    };
+    const [numCards, setNumCardsState] = useState(getInitialNumCards());
+    function setNumCards(n: number) {
+        window.location.hash = `n=${n}`;
+        setNumCardsState(n);
+    }
     const picSet = getPicSet(numCards);
     if (cardType) {
         return <ActiveGame numCards={numCards}
@@ -24,7 +35,7 @@ export function App() {
         <div>
             <p class={"setup-explanation"}>Choose how many different cards you'd like:</p>
             <div style={{marginBottom: '20px'}}>
-                <ArcSelect val={numCards} setVal={setNumCards} min={4} max={24} title={picSet.title}/>
+                <ArcSelect val={numCards} setVal={setNumCards} min={minNumCards} max={maxNumCards} title={picSet.title}/>
             </div>
             <p class={"setup-explanation"}>And then click here to play:</p>
             <div style={{textAlign: 'center'}}>
